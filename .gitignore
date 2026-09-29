@@ -1,0 +1,25 @@
+# 🔒 Critical Security: Ignore Private API Credentials & Tokens
+*.json
+*.env
+secret_key*
+*.token
+
+# 🐍 Ignore Local Python Environment & Package Files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# 💻 Ignore IDE Configurations (PyCharm / VS Code)
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
