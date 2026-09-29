@@ -22,7 +22,7 @@ Fuuka Minami handles your tournament enterprise like a high-stakes asset portfol
   > *"🪭 Need some training hm? I suppose... but mind you I have a very busy schedule. Here's what I can help with... 🐦‍🔥"*
 
 ### 💰 2. Frictionless Ledger Logging (`!log`)
-* **The Protocol:** Order-independent parameters. Table captains can input match scores in any random sequence (e.g., `!log @Charlie 21000 @Alice 35000 @David 18000 @Bob 26000`).
+* **The Protocol:** Order-independent parameters. Table captains can input match scores in any random sequence (e.g., `!log @Ichihime 21000 @Mika 35000 @Akagi 18000 @Fuuka Minami 26000`).
 * **The Core Auditing:** The engine unpacks the arguments, verifies the biological signatures (no duplicate players), and ensures the table equity balances perfectly to exactly **100,000 points**. It then programmatically sorts positions from 1st to 4th place.
 * **The Spreadsheet Output:** Appends a clean 15-column receipt into the `Game_Logs` sheet tracking the *Timestamp, Game ID, Raw Scores, calculated tournament Uma points (+15 / +5 / -5 / -15), and exact Ladder Point yields* concurrently.
 
