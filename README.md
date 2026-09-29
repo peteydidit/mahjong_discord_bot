@@ -9,7 +9,7 @@ The system is fully decoupled into optimized python modules, utilizing in-memory
 ## 💎 Character & Tone Profile
 Fuuka Minami handles your tournament enterprise like a high-stakes asset portfolio. 
 * **The Emojis:** Folding Fan (🪭), Phoenix (🐦‍🔥), and Wine/Luxury (🍷, 💼, 💰, 🌴).
-* **The Attitude:** Sophisticated, commanding, and business-minded. Poorly formatted inputs or bad table math are treated as sloppy financial audits rather than code exceptions. Fuuka keeps your associates aligned using custom corporate dialogue blocks:
+* **The Attitude:** Sophisticated, commanding, and business-minded. Poorly formatted inputs or bad table math are treated as sloppy financial audits rather than code exceptions. Fuuka keeps your associates aligned using custom corporate dialogue blocks.
 
 
 ---
