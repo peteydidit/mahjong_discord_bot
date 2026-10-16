@@ -7,7 +7,7 @@ import strings
 # Global Cache Variables sitting in local system RAM
 LEADERBOARD_CACHE = None
 CACHE_TIMESTAMP = None
-CACHE_DURATION = timedelta(minutes=10) # Auto-refresh every 10 mins fallback
+CACHE_DURATION = timedelta(minutes=10)
 
 def force_cache_refresh():
     """Forces the system to clear its cache memory after a fresh game log or deletion."""
@@ -17,10 +17,21 @@ def force_cache_refresh():
 
 def generate_leaderboard_embed(flag: str = None) -> tuple:
     """
-    Queries data records from the sheet matrix.
+    Queries data records from the sheet matrix cache.
     Returns (discord.Embed, list_of_player_data) or (None, error_string)
     """
-    all_rows = config.SHEET_LEADERBOARD.get_all_values()
+    global LEADERBOARD_CACHE, CACHE_TIMESTAMP
+    now = datetime.now()
+
+    if LEADERBOARD_CACHE is None or CACHE_TIMESTAMP is None or (now - CACHE_TIMESTAMP) > CACHE_DURATION:
+        try:
+            LEADERBOARD_CACHE = config.SHEET_LEADERBOARD.get_all_values()
+            CACHE_TIMESTAMP = now
+        except Exception as e:
+            print(f"Google Sheets Network API Fault: {e}")
+            return None, strings.AUDIT_FAILURE
+
+    all_rows = LEADERBOARD_CACHE
     if len(all_rows) <= 1:
         return None, strings.LEADERBOARD_EMPTY
 
@@ -70,20 +81,47 @@ def generate_leaderboard_embed(flag: str = None) -> tuple:
     return embed, parsed_leaderboard
 
 def delete_game_log_by_id(game_id: str) -> bool:
-    """
-    Scans Column B (Index 1) of Game_Logs for the given short ID.
-    If found, deletes that exact row and returns True. Otherwise, returns False.
-    """
-    # Fetch all values currently sitting inside the log tab
+    """Scans Column B of Game_Logs for the given ID. Deletes row if matched."""
     all_logs = config.SHEET_LOGS.get_all_values()
 
-    # Loop over log rows skipping the header (Row 1)
     for row_idx, row in enumerate(all_logs, start=1):
         if len(row) > 1 and row[1].strip() == game_id.strip():
-            # Delete the matching row number from the sheet matrix
             config.SHEET_LOGS.delete_rows(row_idx)
-            # Force our fast in-memory leaderboard cache to clear and refresh
             force_cache_refresh()
             return True
-
     return False
+
+def render_table_string(ctx_or_channel, data_matrix, display_limit: int, header_type: str = "Rank") -> str:
+    """Shared formatting component to safely render backslash-free ASCII leaderboard matrices."""
+    # Handle guild extraction polymorphically from both context types and scheduled guild task streams
+    guild = ctx_or_channel.guild if hasattr(ctx_or_channel, 'guild') else ctx_or_channel.guild
+
+    table_content = f"```\n{header_type} | Player          | Games | Net Pts | Adjusted\n---------------------------------------------------\n"
+    for idx, row in enumerate(data_matrix[:display_limit], start=1):
+        member = guild.get_member(int(row["id"])) if guild else None
+        name = member.display_name if member else f"User({row['id'][:6]})"
+        name_fixed = (name[:15] + "..") if len(name) > 15 else name.ljust(15)
+
+        net_formatted = f"{row['net']:+.1f}".ljust(7)
+        adj_formatted = f"{row['adjusted']:+.1f}"
+        games_str = str(row['games']).ljust(5)
+        rank_str = str(idx).ljust(4 if header_type == "Rank" else 5)
+
+        table_content += f"{rank_str} | {name_fixed} | {games_str} | {net_formatted} | {adj_formatted}\n"
+    return table_content + "```"
+
+def build_weekly_report(data_matrix) -> discord.Embed:
+    # Capture the exact date of execution formatted as MM/DD/YYYY
+    date_str = datetime.now().strftime("%m/%d/")
+    season_code = config.get_current_season_code()
+    readable_season = formulas.format_season_code_readable(season_code)
+    title_text = f"📊 FML Weekly Operations Review for {date_str}{readable_season} 📊"
+
+    embed = discord.Embed(title=title_text, color=0x1E4D2B)
+    return embed
+
+
+def build_seasonal_report(data_matrix, closing_season: str, champ_mention: str) -> tuple:
+    embed = discord.Embed(title=f"🏆 FML Championship Finals: {formulas.format_season_code_readable(closing_season)} 🏆", color=0x1E4D2B)
+    congrats = strings.SEASON_CHAMPION_ANNOUNCEMENT.format(season=formulas.format_season_code_readable(closing_season), champion=champ_mention)
+    return embed, congrats

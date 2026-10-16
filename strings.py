@@ -1,10 +1,10 @@
 # Short definitions displayed on global !help
 HELP_INTRO = (
-    "Need some training hm? 🪭 *Spins fan* 🪭 I suppose... but mind you I have a very busy schedule. "
+    "Need some training hm? 🪭 *Spins fan* 🪭 I suppose... but mind you I have a very busy schedule. I log transactions (mahjong games) to the ledger (leaderboard)."
     "Here's what I can help with... 🐦‍🔥"
 )
-BRIEF_LOG = "Log a completed table transaction."
-BRIEF_LEADERBOARD = "Evaluate business performance metrics."
+BRIEF_LOG = "Log a transaction (mahjong score) between 4 associates (players)."
+BRIEF_LEADERBOARD = "View ledger (leaderboard)."
 
 # Deep documentation manuals displayed on !help [command]
 HELP_LOG = (
@@ -47,8 +47,8 @@ DELETE_SUCCESS = "🗑️ **Transaction Successfully Refunded** 🗑️\n*Game r
 SEASON_CHAMPION_ANNOUNCEMENT = (
     "🍷 🪭 **THE MARKET CLOSES. OPERATIONS AUDIT COMPLETE.** 🪭 🍷\n\n"
     "The {season} has officially terminated. "
-    "One associate has completely dominated the FML racket and collected the highest dividends.\n\n"
-    "👑 **Congratulations to our Seasonal Champion: {champion}** 👑\n\n"
+    "One associate has completely dominated the FML earnings period and collected the highest dividends.\n\n"
+    "👑 **Congratulations to our Seasonal Champion: {champion}** 👑\n\n"                              
     "Your efficiency has been noted, and your bonuses have been secured on the payroll ledger. "
-    "To the rest of you... the books reset tomorrow. Let's see who survives the next round. 🐦‍🔥"
+    "To the rest of you... the books reset tomorrow. Let's see who can rise from the ashes next round. 🐦‍🔥"
 )
